@@ -4,6 +4,7 @@ using UnityEngine;
 namespace Excercise1
 {
     public class CharacterService : MonoBehaviour
+
     {
         private readonly Dictionary<string, ICharacter> _charactersById = new();
         public bool TryAddCharacter(string id, ICharacter character)

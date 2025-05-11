@@ -25,9 +25,19 @@ namespace Gameplay
         public void SetDirection(Vector3 direction)
             => _direction = direction;
 
+        public bool GroundCheck()
+            => _rigidbody.linearVelocity.y == 0f;
+
+        public bool FallCheck()
+             => _rigidbody.linearVelocity.y < 0f;
+
+        public bool IdleCheck()
+            => Mathf.Abs(_rigidbody.linearVelocity.x) <= .25f && Mathf.Abs(_rigidbody.linearVelocity.z) <= .25f;
+
         public IEnumerator Jump()
         {
             yield return new WaitForFixedUpdate();
+            _rigidbody.linearVelocity = new Vector3(_rigidbody.linearVelocity.x, 0f, _rigidbody.linearVelocity.z);
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }

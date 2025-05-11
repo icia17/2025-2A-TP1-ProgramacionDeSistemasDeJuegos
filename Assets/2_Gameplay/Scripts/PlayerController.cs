@@ -9,14 +9,35 @@ namespace Gameplay
         [SerializeField] private InputActionReference moveInput;
         [SerializeField] private InputActionReference jumpInput;
         [SerializeField] private float airborneSpeedMultiplier = .5f;
-        //TODO: This booleans are not flexible enough. If we want to have a third jump or other things, it will become a hazzle.
-        private bool _isJumping;
-        private bool _isDoubleJumping;
+
+        /*
+         * FIX: to ease the expansion of player movement capabilities, I added a State Pattern that switches the current Player Movement State
+         * depending on the players input. This will make it easier to expand and create new movement mechanics while keeping code clean and
+         * understandable.
+        */
+        private PlayerMovementState currentMovementState;
+
+        public PlayerJumpState playerJumpState { get; private set; }
+        public PlayerFallState playerFallState { get; private set; }
+        public PlayerIdleState playerIdleState { get; private set; }
+        public PlayerWalkState playerWalkState { get; private set; }
+
         private Character _character;
         private Coroutine _jumpCoroutine;
 
         private void Awake()
-            => _character = GetComponent<Character>();
+        { 
+            _character = GetComponent<Character>();
+
+            // We set all possible Player Movement States beforehand to avoid excessive instantiation.
+            playerJumpState = new PlayerJumpState(this);
+            playerFallState = new PlayerFallState(this);
+            playerIdleState = new PlayerIdleState(this);
+            playerWalkState = new PlayerWalkState(this);
+
+            // The base movement state is set to idle.
+            currentMovementState = playerIdleState;
+        }
 
         private void OnEnable()
         {
@@ -40,31 +61,55 @@ namespace Gameplay
                 jumpInput.action.performed -= HandleJumpInput;
         }
 
+        private void Update()
+        {
+            currentMovementState.Update();
+            Debug.Log("Current Movement State is : " + currentMovementState.GetType().Name);    
+        }
+
+        // Move Logic Moved to Move(), Added State Pattern to open movement capabilities for expansion
         private void HandleMoveInput(InputAction.CallbackContext ctx)
+            => currentMovementState.OnMove(ctx);
+
+        // Jump Logic Moved to Jump(), Added State Pattern to open movement capabilities for expansion
+        private void HandleJumpInput(InputAction.CallbackContext ctx)
+            => currentMovementState.OnJump();
+        
+        /* 
+         * While typically we use functions to run code depending on whether we enter or exit a state, currently the movement state change
+         * doesnt require OnExitState() and OnEnterState(), so to keep things simple I decided not to add them. 
+        */
+        public void ChangeMovementState(PlayerMovementState newState)
+        {
+            currentMovementState.OnExit();
+            currentMovementState = newState;
+            currentMovementState.OnEnter();
+        }
+
+        public bool GroundCheck()
+            => _character.GroundCheck();
+
+        public bool FallCheck()
+            => _character.FallCheck();
+
+        public bool IdleCheck()
+            => _character.IdleCheck();
+
+        // Some code simplification was done with isJumping boolean and a ternary operator.
+        public void Move(InputAction.CallbackContext ctx)
         {
             var direction = ctx.ReadValue<Vector2>().ToHorizontalPlane();
-            if (_isJumping || _isDoubleJumping)
-                direction *= airborneSpeedMultiplier;
+            direction = !GroundCheck() ? direction *= airborneSpeedMultiplier : direction;
             _character?.SetDirection(direction);
         }
 
-        private void HandleJumpInput(InputAction.CallbackContext ctx)
+        public void RunJumpCoroutine()
         {
             //TODO: This function is barely readable. We need to refactor how we control the jumping
-            if (_isJumping)
-            {
-                if (_isDoubleJumping)
-                    return;
-                RunJumpCoroutine();
-                _isDoubleJumping = true;
-                return;
-            }
-            RunJumpCoroutine();
-            _isJumping = true;
-        }
-
-        private void RunJumpCoroutine()
-        {
+            /*
+             * FIX 1: By using a jumpCount variable, we greatly simplify the function to just 3-5 lines of code. If we can still jump, aka our jumpCount
+             * is greater than zero, a jump triggers and we lose one jump from our jumpCount.
+            */
             if (_jumpCoroutine != null)
                 StopCoroutine(_jumpCoroutine);
             _jumpCoroutine = StartCoroutine(_character.Jump());
@@ -76,8 +121,7 @@ namespace Gameplay
             {
                 if (Vector3.Angle(contact.normal, Vector3.up) < 5)
                 {
-                    _isJumping = false;
-                    _isDoubleJumping = false;
+                    playerJumpState.ResetJumpCount();
                 }
             }
         }
