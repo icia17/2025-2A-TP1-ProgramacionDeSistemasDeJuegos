@@ -6,9 +6,16 @@ namespace Gameplay
     [RequireComponent(typeof(Rigidbody))]
     public class Character : MonoBehaviour
     {
+        [Header("Movement Properties")]
         [SerializeField] private float acceleration = 10;
         [SerializeField] private float speed = 3;
         [SerializeField] private float jumpForce = 10;
+
+        [Header("Ground Detection Properties")]
+        [SerializeField] private float groundDetectionOffset = 2f;
+        [SerializeField] private float groundDetectionDistance = .1f;
+        [SerializeField] private LayerMask groundLayer;
+
         private Vector3 _direction = Vector3.zero;
         private Rigidbody _rigidbody;
 
@@ -26,7 +33,7 @@ namespace Gameplay
             => _direction = direction;
 
         public bool GroundCheck()
-            => _rigidbody.linearVelocity.y == 0f;
+            => Physics.Raycast(transform.position + Vector3.down * groundDetectionOffset, Vector3.down, groundDetectionDistance, groundLayer);
 
         public bool FallCheck()
              => _rigidbody.linearVelocity.y < 0f;

@@ -95,11 +95,11 @@ namespace Gameplay
         public bool IdleCheck()
             => _character.IdleCheck();
 
-        // Some code simplification was done with isJumping boolean and a ternary operator.
-        public void Move(InputAction.CallbackContext ctx)
+        // Some code simplification was done with isGrounded boolean and a ternary operator.
+        public void Move(InputAction.CallbackContext ctx, bool isGrounded)
         {
             var direction = ctx.ReadValue<Vector2>().ToHorizontalPlane();
-            direction = !GroundCheck() ? direction *= airborneSpeedMultiplier : direction;
+            direction = isGrounded ? direction *= airborneSpeedMultiplier : direction;
             _character?.SetDirection(direction);
         }
 
@@ -107,8 +107,8 @@ namespace Gameplay
         {
             //TODO: This function is barely readable. We need to refactor how we control the jumping
             /*
-             * FIX 1: By using a jumpCount variable, we greatly simplify the function to just 3-5 lines of code. If we can still jump, aka our jumpCount
-             * is greater than zero, a jump triggers and we lose one jump from our jumpCount.
+             * FIX 1: Removed Jump function, logic is now handled in a separate PlayerJumpState class belonging to an application of the State Pattern called
+             * PlayerMovementState. The only logic handled inside of here is starting the actual Jump Coroutine.
             */
             if (_jumpCoroutine != null)
                 StopCoroutine(_jumpCoroutine);

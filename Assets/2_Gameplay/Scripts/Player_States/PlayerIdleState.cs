@@ -31,7 +31,7 @@ namespace Gameplay
         public override void OnMove(InputAction.CallbackContext ctx)
         {
             player.ChangeMovementState(player.playerWalkState);
-            player.Move(ctx);
+            player.Move(ctx, true);
         }
     }
 }

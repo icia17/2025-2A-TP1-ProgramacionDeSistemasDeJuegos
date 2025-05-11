@@ -24,16 +24,12 @@ namespace Gameplay
 
         public override void OnEnter()
         {
-            if (!player.FallCheck())
-                ResetJumpCount();
-
             OnJump();
         }
 
         public override void OnExit()
         {
-            if (!player.FallCheck())
-                ResetJumpCount();
+
         }
 
         public override void Update()
@@ -52,6 +48,6 @@ namespace Gameplay
         }
 
         public override void OnMove(InputAction.CallbackContext ctx)
-            => player.Move(ctx);
+            => player.Move(ctx, false);
     }
 }

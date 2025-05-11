@@ -27,6 +27,6 @@ namespace Gameplay
             => player.ChangeMovementState(player.playerJumpState);
 
         public override void OnMove(InputAction.CallbackContext ctx)
-            => player.Move(ctx);
+            => player.Move(ctx, false);
     }
 }
