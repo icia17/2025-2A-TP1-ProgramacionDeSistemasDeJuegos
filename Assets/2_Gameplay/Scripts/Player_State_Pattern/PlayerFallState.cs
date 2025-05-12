@@ -14,7 +14,7 @@ namespace Gameplay
 
         public override void OnExit()
         {
-
+            player.Move(player.GetDirection(), player.GroundCheck());
         }
 
         public override void Update() 

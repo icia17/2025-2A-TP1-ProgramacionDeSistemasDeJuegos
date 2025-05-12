@@ -972,8 +972,8 @@ MonoBehaviour:
   acceleration: 20
   speed: 5
   jumpForce: 5
-  characterHeight: 2
-  groundDetectionDistance: 0.25
+  characterHeight: 1
+  groundDetectionDistance: 0.01
   groundLayer:
     serializedVersion: 2
     m_Bits: 128

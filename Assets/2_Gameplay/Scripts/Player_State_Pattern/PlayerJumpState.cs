@@ -32,7 +32,7 @@ namespace Gameplay
 
         public override void OnExit()
         {
-
+            player.Move(player.GetDirection(), player.GroundCheck());
         }
 
         public override void Update()
@@ -45,7 +45,7 @@ namespace Gameplay
         {
             if (jumpCount > 0)
             {
-                player.RunJumpCoroutine();
+                player.Jump();
                 jumpCount--;
             }
         }

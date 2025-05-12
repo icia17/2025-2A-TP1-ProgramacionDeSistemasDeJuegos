@@ -12,12 +12,14 @@ namespace Gameplay
         [SerializeField] private float jumpForce = 10;
 
         [Header("Ground Detection Properties")]
-        [SerializeField] private float characterHeight = 2f;
+        [SerializeField] private float characterHalfHeight = 1f;
         [SerializeField] private float groundDetectionDistance = .1f;
         [SerializeField] private LayerMask groundLayer;
 
         public Vector3 _direction { get; private set; }
         private Rigidbody _rigidbody;
+
+        private float _lastYVelocity;
 
         private void Awake()
             => _rigidbody = GetComponent<Rigidbody>();
@@ -33,18 +35,17 @@ namespace Gameplay
             => _direction = direction;
 
         public bool GroundCheck()
-            => Physics.Raycast(transform.position, Vector3.down, characterHeight + groundDetectionDistance, groundLayer);
+            => Physics.Raycast(transform.position, Vector3.down, characterHalfHeight + groundDetectionDistance, groundLayer);
 
         public bool FallCheck()
-             => _rigidbody.linearVelocity.y < 0f;
+            => _rigidbody.linearVelocity.y < 0f;
 
         public bool IdleCheck()
             => Mathf.Abs(_rigidbody.linearVelocity.x) <= .25f && Mathf.Abs(_rigidbody.linearVelocity.z) <= .25f;
 
-        public IEnumerator Jump()
+        public void Jump()
         {
-            yield return new WaitForFixedUpdate();
-            _rigidbody.linearVelocity = new Vector3(_rigidbody.linearVelocity.x, 0f, _rigidbody.linearVelocity.z);
+            _rigidbody.linearVelocity = _rigidbody.linearVelocity.IgnoreY();
             _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }

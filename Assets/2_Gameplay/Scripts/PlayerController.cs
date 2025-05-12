@@ -62,11 +62,7 @@ namespace Gameplay
         }
 
         private void Update()
-        {
-            currentMovementState.Update();
-            Debug.Log($"Current Movement State is : {currentMovementState.GetType().Name}");
-            Debug.Log($"Current Character Direction is: {_character._direction}");
-        }
+            => currentMovementState.Update();
 
         // Move Logic Moved to Move(), Added State Pattern to open movement capabilities for expansion
         private void HandleMoveInput(InputAction.CallbackContext ctx)
@@ -76,15 +72,13 @@ namespace Gameplay
         private void HandleJumpInput(InputAction.CallbackContext ctx)
             => currentMovementState.OnJump();
         
-        /* 
-         * While typically we use functions to run code depending on whether we enter or exit a state, currently the movement state change
-         * doesnt require OnExitState() and OnEnterState(), so to keep things simple I decided not to add them. 
-        */
         public void ChangeMovementState(PlayerMovementState newState)
         {
             currentMovementState.OnExit();
             currentMovementState = newState;
             currentMovementState.OnEnter();
+
+            Debug.Log($"New Movement State: {newState.GetType().Name}");
         }
 
         public bool GroundCheck()
@@ -98,21 +92,18 @@ namespace Gameplay
 
         // Some code simplification was done with isGrounded boolean and a ternary operator.
         public void Move(Vector3 direction, bool isGrounded)
-            => _character?.SetDirection(isGrounded ? direction : direction * airborneSpeedMultiplier);
+            => _character?.SetDirection(isGrounded ? direction.normalized : direction.normalized * airborneSpeedMultiplier);
 
         public Vector3 GetDirection()
             => _character._direction;
 
-        public void RunJumpCoroutine()
-        {
-            /*
-             * FIX: Removed Jump function, logic is now handled in a separate PlayerJumpState class belonging to an application of the State Pattern called
-             * PlayerMovementState. The only logic handled inside of here is starting the actual Jump Coroutine.
-            */
-            if (_jumpCoroutine != null)
-                StopCoroutine(_jumpCoroutine);
-            _jumpCoroutine = StartCoroutine(_character.Jump());
-        }
+        /*
+         * FIX: Reworked Jump function, logic is now handled in a separate PlayerJumpState class belonging to an application of the State Pattern called
+         * PlayerMovementState. The only logic handled inside of here is making the Character Jump. Jumping does not start a coroutine anymore as its 
+         * pointless since we have a way to detect the current movement state
+        */
+        public void Jump()
+            => _character.Jump();
 
         private void OnCollisionEnter(Collision other)
         {
