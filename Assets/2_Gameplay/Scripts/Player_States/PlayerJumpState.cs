@@ -12,7 +12,7 @@ namespace Gameplay
         */
         private int jumpCount = 3;
         private int baseJumpCount;
-        
+
         public PlayerJumpState(PlayerController player) : base(player) 
         {
             baseJumpCount = jumpCount;
@@ -27,7 +27,7 @@ namespace Gameplay
         public override void OnEnter()
         {
             OnJump();
-            player.MoveAirborne();
+            player.Move(player.GetDirection(), false);
         }
 
         public override void OnExit()
@@ -50,7 +50,7 @@ namespace Gameplay
             }
         }
 
-        public override void OnMove(InputAction.CallbackContext ctx)
-            => player.MoveAirborne();
+        public override void OnMove(Vector3 direction)
+            => player.Move(direction, false);
     }
 }

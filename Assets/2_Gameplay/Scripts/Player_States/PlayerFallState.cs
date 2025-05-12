@@ -9,7 +9,7 @@ namespace Gameplay
 
         public override void OnEnter()
         {
-            player.MoveAirborne();
+
         }
 
         public override void OnExit()
@@ -29,7 +29,7 @@ namespace Gameplay
                 player.ChangeMovementState(player.playerJumpState);
         }
 
-        public override void OnMove(InputAction.CallbackContext ctx)
-            => player.MoveAirborne();
+        public override void OnMove(Vector3 direction)
+            => player.Move(direction, false);
     }
 }

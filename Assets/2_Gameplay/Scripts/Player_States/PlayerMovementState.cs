@@ -14,7 +14,7 @@ namespace Gameplay
         public abstract void OnExit();
         public abstract void Update();
 
-        public abstract void OnMove(InputAction.CallbackContext ctx);
+        public abstract void OnMove(Vector3 direction);
         public abstract void OnJump();
     }
 }

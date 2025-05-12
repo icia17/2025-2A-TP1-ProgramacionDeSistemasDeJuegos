@@ -31,10 +31,10 @@ namespace Gameplay
                 player.ChangeMovementState(player.playerJumpState);
         }
 
-        public override void OnMove(InputAction.CallbackContext ctx)
+        public override void OnMove(Vector3 direction)
         {
             player.ChangeMovementState(player.playerWalkState);
-            player.Move(ctx);
+            player.Move(direction, true);
         }
     }
 }

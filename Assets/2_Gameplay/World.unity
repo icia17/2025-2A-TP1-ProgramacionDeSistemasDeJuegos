@@ -956,7 +956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveInput: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   jumpInput: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  airborneSpeedMultiplier: 1
+  airborneSpeedMultiplier: 0.5
 --- !u!114 &1618370481
 MonoBehaviour:
   m_ObjectHideFlags: 0

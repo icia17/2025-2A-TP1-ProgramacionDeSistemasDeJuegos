@@ -64,12 +64,13 @@ namespace Gameplay
         private void Update()
         {
             currentMovementState.Update();
-            Debug.Log($"Current Movement State is : {currentMovementState.GetType().Name}");    
+            Debug.Log($"Current Movement State is : {currentMovementState.GetType().Name}");
+            Debug.Log($"Current Character Direction is: {_character._direction}");
         }
 
         // Move Logic Moved to Move(), Added State Pattern to open movement capabilities for expansion
         private void HandleMoveInput(InputAction.CallbackContext ctx)
-            => currentMovementState.OnMove(ctx);
+            => currentMovementState.OnMove(ctx.ReadValue<Vector2>().ToHorizontalPlane());
 
         // Jump Logic Moved to Jump(), Added State Pattern to open movement capabilities for expansion
         private void HandleJumpInput(InputAction.CallbackContext ctx)
@@ -96,16 +97,11 @@ namespace Gameplay
             => _character.IdleCheck();
 
         // Some code simplification was done with isGrounded boolean and a ternary operator.
-        public void Move(InputAction.CallbackContext ctx)
-        {
-            var direction = ctx.ReadValue<Vector2>().ToHorizontalPlane();
-            _character?.SetDirection(direction);
-        }
+        public void Move(Vector3 direction, bool isGrounded)
+            => _character?.SetDirection(isGrounded ? direction : direction * airborneSpeedMultiplier);
 
-        public void MoveAirborne()
-        {
-            _character?.SetDirection(_character._direction * airborneSpeedMultiplier);
-        }
+        public Vector3 GetDirection()
+            => _character._direction;
 
         public void RunJumpCoroutine()
         {
