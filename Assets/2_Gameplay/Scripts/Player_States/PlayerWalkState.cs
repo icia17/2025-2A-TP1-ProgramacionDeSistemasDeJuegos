@@ -26,9 +26,12 @@ namespace Gameplay
         }
 
         public override void OnJump()
-            => player.ChangeMovementState(player.playerJumpState);
+        {
+            if (player.playerJumpState.CanJump())
+                player.ChangeMovementState(player.playerJumpState);
+        }
 
         public override void OnMove(InputAction.CallbackContext ctx)
-            => player.Move(ctx, true);
+            => player.Move(ctx);
     }
 }

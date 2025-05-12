@@ -560,7 +560,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &947351152
 RectTransform:
   m_ObjectHideFlags: 0
@@ -956,7 +956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveInput: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   jumpInput: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  airborneSpeedMultiplier: 0.5
+  airborneSpeedMultiplier: 1
 --- !u!114 &1618370481
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -972,8 +972,8 @@ MonoBehaviour:
   acceleration: 20
   speed: 5
   jumpForce: 5
-  groundDetectionOffset: 1
-  groundDetectionDistance: 0.1
+  characterHeight: 2
+  groundDetectionDistance: 0.25
   groundLayer:
     serializedVersion: 2
     m_Bits: 128

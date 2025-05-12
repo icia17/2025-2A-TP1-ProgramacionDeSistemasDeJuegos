@@ -15,7 +15,10 @@ namespace Gameplay
         private void Awake()
         {
             if (interactionText)
+            {
                 _textFormat = interactionText.text;
+                interactionText.SetText(""); // FIX: Instead of enabling/disabling the whole GameObject and causing stutters, we set the text component to nothing for faster loading time.
+            }
         }
 
         private void OnEnable()
@@ -35,7 +38,7 @@ namespace Gameplay
             if (_interactable == null)
                 return;
             _interactable.Interact(this);
-            interactionText?.gameObject.SetActive(false);
+            interactionText.SetText("");
         }
 
         private void OnTriggerEnter(Collider other)
@@ -43,8 +46,11 @@ namespace Gameplay
             if (other.TryGetComponent(out _interactable)
                 && interactionText)
             {
-                interactionText.gameObject.SetActive(true);
-                interactionText.SetText(string.Format(_textFormat, _interactable));
+                /*
+                 * FIX: Instead of formatting the _interactable only and causing the text to appear as "(Item Class) GameObject.(Item Class)" we use _interactable.name so that only
+                 * the name of the item appears "(Item Name)"
+                */
+                interactionText.SetText(string.Format(_textFormat, _interactable.Name));
             }
         }
 
@@ -54,7 +60,7 @@ namespace Gameplay
                 && otherInteractable == _interactable)
             {
                 _interactable = null;
-                interactionText?.gameObject.SetActive(false);
+                interactionText.SetText("");
             }
         }
     }

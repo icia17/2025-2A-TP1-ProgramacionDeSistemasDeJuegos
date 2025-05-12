@@ -64,7 +64,7 @@ namespace Gameplay
         private void Update()
         {
             currentMovementState.Update();
-            Debug.Log("Current Movement State is : " + currentMovementState.GetType().Name);    
+            Debug.Log($"Current Movement State is : {currentMovementState.GetType().Name}");    
         }
 
         // Move Logic Moved to Move(), Added State Pattern to open movement capabilities for expansion
@@ -96,18 +96,21 @@ namespace Gameplay
             => _character.IdleCheck();
 
         // Some code simplification was done with isGrounded boolean and a ternary operator.
-        public void Move(InputAction.CallbackContext ctx, bool isGrounded)
+        public void Move(InputAction.CallbackContext ctx)
         {
             var direction = ctx.ReadValue<Vector2>().ToHorizontalPlane();
-            direction = isGrounded ? direction *= airborneSpeedMultiplier : direction;
             _character?.SetDirection(direction);
+        }
+
+        public void MoveAirborne()
+        {
+            _character?.SetDirection(_character._direction * airborneSpeedMultiplier);
         }
 
         public void RunJumpCoroutine()
         {
-            //TODO: This function is barely readable. We need to refactor how we control the jumping
             /*
-             * FIX 1: Removed Jump function, logic is now handled in a separate PlayerJumpState class belonging to an application of the State Pattern called
+             * FIX: Removed Jump function, logic is now handled in a separate PlayerJumpState class belonging to an application of the State Pattern called
              * PlayerMovementState. The only logic handled inside of here is starting the actual Jump Coroutine.
             */
             if (_jumpCoroutine != null)

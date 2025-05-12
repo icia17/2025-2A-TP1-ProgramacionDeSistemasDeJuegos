@@ -12,11 +12,11 @@ namespace Gameplay
         [SerializeField] private float jumpForce = 10;
 
         [Header("Ground Detection Properties")]
-        [SerializeField] private float groundDetectionOffset = 2f;
+        [SerializeField] private float characterHeight = 2f;
         [SerializeField] private float groundDetectionDistance = .1f;
         [SerializeField] private LayerMask groundLayer;
 
-        private Vector3 _direction = Vector3.zero;
+        public Vector3 _direction { get; private set; }
         private Rigidbody _rigidbody;
 
         private void Awake()
@@ -33,7 +33,7 @@ namespace Gameplay
             => _direction = direction;
 
         public bool GroundCheck()
-            => Physics.Raycast(transform.position + Vector3.down * groundDetectionOffset, Vector3.down, groundDetectionDistance, groundLayer);
+            => Physics.Raycast(transform.position, Vector3.down, characterHeight + groundDetectionDistance, groundLayer);
 
         public bool FallCheck()
              => _rigidbody.linearVelocity.y < 0f;

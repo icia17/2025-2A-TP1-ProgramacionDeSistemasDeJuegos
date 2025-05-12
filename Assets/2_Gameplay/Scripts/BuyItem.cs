@@ -6,9 +6,12 @@ namespace Gameplay
     public class BuyItem : MonoBehaviour, IInteractable
     {
         [SerializeField] private string itemName;
+        public string Name { get => itemName; }
+
         public void Interact(IInteractor target)
         {
-            Debug.Log($"{name}({nameof(Heal).Colored("#555555")}): {target.transform.name} now has item {itemName}");
+            // FIX: Now the item name is correctly shown inside the parentheses instead of "Heal"
+            Debug.Log($"{name}({Name.Colored("#555555")}): {target.transform.name} now has item {Name}");
             gameObject.SetActive(false);
         }
     }

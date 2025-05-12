@@ -5,15 +5,14 @@ namespace Gameplay
 {
     public class PlayerJumpState : PlayerMovementState
     {
-        //TODO: These booleans are not flexible enough. If we want to have a third jump or other things, it will become a hazzle.
         /*
-         * FIX 1: Instead of using booleans, we use a jump counter. If we want to add more jumps, we simply add more to the jumpCount.
+         * FIX: Instead of using booleans for jump checks, we use a jump counter. If we want to add more jumps, we simply add more to the jumpCount.
          * The variable baseJumpCount is in charge of setting the jumpCount back to its base value when it touches the ground, and checking
          * for directional movement blocking when jumping.
         */
         private int jumpCount = 3;
         private int baseJumpCount;
-
+        
         public PlayerJumpState(PlayerController player) : base(player) 
         {
             baseJumpCount = jumpCount;
@@ -22,9 +21,13 @@ namespace Gameplay
         public void ResetJumpCount()
             => jumpCount = baseJumpCount;
 
+        public bool CanJump()
+            => jumpCount > 0;
+
         public override void OnEnter()
         {
             OnJump();
+            player.MoveAirborne();
         }
 
         public override void OnExit()
@@ -48,6 +51,6 @@ namespace Gameplay
         }
 
         public override void OnMove(InputAction.CallbackContext ctx)
-            => player.Move(ctx, false);
+            => player.MoveAirborne();
     }
 }
