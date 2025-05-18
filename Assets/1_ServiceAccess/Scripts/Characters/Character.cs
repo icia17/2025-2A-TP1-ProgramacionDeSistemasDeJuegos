@@ -9,14 +9,14 @@ namespace Excercise1
 
         protected virtual void OnEnable()
         {
-            //TODO: Add to CharacterService. The id should be the given serialized field. 
+            // DONE: Add to CharacterService. The id should be the given serialized field. 
             // FIX 1: Made CharacterService a Singleton and called the TryAddCharacter function directly from here.
             CharacterService.instance.TryAddCharacter(id, this);
         }
 
         protected virtual void OnDisable()
         {
-            //TODO: Remove from CharacterService.
+            // DONE: Remove from CharacterService.
             // FIX 1: Made CharacterService a Singleton and called the TryRemoveCharacter function directly from here.
             CharacterService.instance.TryRemoveCharacter(id);
         }

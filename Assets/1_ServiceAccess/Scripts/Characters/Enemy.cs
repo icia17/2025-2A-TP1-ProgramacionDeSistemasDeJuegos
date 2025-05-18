@@ -19,7 +19,7 @@ namespace Excercise1
         protected override void OnEnable()
         {
             base.OnEnable();
-            //TODO: Get the reference to the player.
+            // DONE: Get the reference to the player.
             // FIX 1: Created a function inside CharacterService to retrieve a character from the dictionary by inputting an id
             if (!CharacterService.instance.TryGetCharacter(playerId, out _player))
                 Debug.LogError($"{_logTag} Player not found!");
