@@ -25,7 +25,6 @@ namespace Excercise1
             => _charactersById.TryAdd(id, character);
         public bool TryRemoveCharacter(string id)
             => _charactersById.Remove(id);
-
         public bool TryGetCharacter(string id, out ICharacter character)
             => _charactersById.TryGetValue(id, out character);
     }
