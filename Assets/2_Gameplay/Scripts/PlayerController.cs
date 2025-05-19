@@ -23,8 +23,6 @@ namespace Gameplay
         public PlayerWalkState playerWalkState { get; private set; }
 
         private Character _character;
-        private Coroutine _jumpCoroutine;
-
         private void Awake()
         { 
             _character = GetComponent<Character>();

@@ -18,9 +18,6 @@ namespace Gameplay
 
         public Vector3 _direction { get; private set; }
         private Rigidbody _rigidbody;
-
-        private float _lastYVelocity;
-
         private void Awake()
             => _rigidbody = GetComponent<Rigidbody>();
 

@@ -20,7 +20,7 @@ namespace Excercise1
         {
             base.OnEnable();
             // DONE: Get the reference to the player.
-            // FIX 1: Created a function inside CharacterService to retrieve a character from the dictionary by inputting an id
+            // FIX 1: Created a function inside CharacterService to try and retrieve a character from the dictionary by inputting an id
             if (!CharacterService.instance.TryGetCharacter(playerId, out _player))
                 Debug.LogError($"{_logTag} Player not found!");
         }
