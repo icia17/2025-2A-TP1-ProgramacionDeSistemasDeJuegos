@@ -38,7 +38,7 @@ namespace Gameplay
             => _rigidbody.linearVelocity.y < 0f;
 
         public bool IdleCheck()
-            => Mathf.Abs(_rigidbody.linearVelocity.x) <= .25f && Mathf.Abs(_rigidbody.linearVelocity.z) <= .25f;
+            => Mathf.Abs(_rigidbody.linearVelocity.x) <= .25f && Mathf.Abs(_rigidbody.linearVelocity.z) <= .25f && _direction == Vector3.zero;
 
         public void Jump()
         {
