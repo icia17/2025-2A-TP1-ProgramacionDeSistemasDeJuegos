@@ -3,23 +3,11 @@ using UnityEngine;
 
 namespace Excercise1
 {
-    public class CharacterService : MonoBehaviour
+    // This class used to implement Monobehaviour, which is not needed as we can instantiate this object without needing a Gameobject for it to reside in.
+    // Now it implements ICharacterService, which is a service for the Service Locator. Now we can get this service from any class using the SL.
+    public class CharacterService : ICharacterService
     {
-        public static CharacterService instance { get; private set; }
-
         private static readonly Dictionary<string, ICharacter> _charactersById = new();
-
-        private void Awake()
-        {
-            if (instance != null && instance != this)
-            {
-                Destroy(this);
-            }
-            else
-            {
-                instance = this;
-            }
-        }
 
         public bool TryAddCharacter(string id, ICharacter character)
             => _charactersById.TryAdd(id, character);

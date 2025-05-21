@@ -10,15 +10,17 @@ namespace Excercise1
         protected virtual void OnEnable()
         {
             // DONE: Add to CharacterService. The id should be the given serialized field. 
-            // FIX 1: Made CharacterService a Singleton and called the TryAddCharacter function directly from here.
-            CharacterService.instance.TryAddCharacter(id, this);
+            // FIX 1: Made CharacterService a Service and called the TryAddCharacter function directly from here using a ServiceLocator.
+            if (ServiceLocator.GetService(out ICharacterService service))
+                service.TryAddCharacter(id, this);
         }
 
         protected virtual void OnDisable()
         {
             // DONE: Remove from CharacterService.
-            // FIX 1: Made CharacterService a Singleton and called the TryRemoveCharacter function directly from here.
-            CharacterService.instance.TryRemoveCharacter(id);
+            // FIX 1: Made CharacterService a Service and called the TryRemoveCharacter function directly from here using a ServiceLocator.
+            if (ServiceLocator.GetService(out ICharacterService service))
+                service.TryRemoveCharacter(id);
         }
     }
 }
