@@ -7,6 +7,9 @@ namespace Gameplay
     {
         public PlayerIdleState(PlayerController player) : base(player) { }
 
+        public override bool IsAvailable()
+            => player.character.IdleCheck();
+
         public override void OnEnter()
         {
 
@@ -19,21 +22,20 @@ namespace Gameplay
 
         public override void Update() 
         {
-            if (!player.GroundCheck())
-                player.ChangeMovementState(player.playerFallState);
-            else if (!player.IdleCheck())
-                player.ChangeMovementState(player.playerWalkState);
+            if (!player.character.GroundCheck())
+                player.playerStateManager.ChangeMovementState("Fall");
+            else if (!player.character.IdleCheck())
+                player.playerStateManager.ChangeMovementState("Walk");
         }
 
         public override void OnJump()
         {
-            if (player.playerJumpState.CanJump())
-                player.ChangeMovementState(player.playerJumpState);
+            player.playerStateManager.ChangeMovementState("Jump");
         }
 
         public override void OnMove(Vector3 direction)
         {
-            player.ChangeMovementState(player.playerWalkState);
+            player.playerStateManager.ChangeMovementState("Walk");
             player.Move(direction, true);
         }
     }

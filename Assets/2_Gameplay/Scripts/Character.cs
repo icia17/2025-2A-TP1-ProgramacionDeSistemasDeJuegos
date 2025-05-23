@@ -18,6 +18,9 @@ namespace Gameplay
 
         public Vector3 _direction { get; private set; }
         private Rigidbody _rigidbody;
+
+        public event System.Action OnGrounded;
+
         private void Awake()
             => _rigidbody = GetComponent<Rigidbody>();
 
@@ -32,7 +35,14 @@ namespace Gameplay
             => _direction = direction;
 
         public bool GroundCheck()
-            => Physics.Raycast(transform.position, Vector3.down, characterHalfHeight + groundDetectionDistance, groundLayer);
+        {
+            var grounded = Physics.Raycast(transform.position, Vector3.down, characterHalfHeight + groundDetectionDistance, groundLayer);
+
+            if (grounded)
+                OnGrounded?.Invoke();
+
+            return grounded;
+        }
 
         public bool FallCheck()
             => _rigidbody.linearVelocity.y < 0f;

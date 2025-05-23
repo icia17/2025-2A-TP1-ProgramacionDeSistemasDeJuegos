@@ -10,47 +10,48 @@ namespace Gameplay
          * The variable baseJumpCount is in charge of setting the jumpCount back to its base value when it touches the ground, and checking
          * for directional movement blocking when jumping.
         */
-        private int jumpCount = 3;
+        private int jumpCount;
         private int baseJumpCount;
 
-        public PlayerJumpState(PlayerController player) : base(player) 
+        public PlayerJumpState(PlayerController player, int jumpLimit) : base(player) 
         {
+            jumpCount = jumpLimit;
             baseJumpCount = jumpCount;
         }
 
         public void ResetJumpCount()
             => jumpCount = baseJumpCount;
 
-        public bool CanJump()
+        public override bool IsAvailable()
             => jumpCount > 0;
 
         public override void OnEnter()
         {
             OnJump();
-            player.Move(player.GetDirection(), false);
+            player.character.SetDirection(player.character._direction);
         }
 
         public override void OnExit()
         {
-            player.Move(player.GetDirection(), player.GroundCheck());
+            player.Move(player.character._direction, player.character.GroundCheck());
         }
 
         public override void Update()
         {
-            if (player.FallCheck())
-                player.ChangeMovementState(player.playerFallState);
+            if (player.character.FallCheck())
+                player.playerStateManager.ChangeMovementState("Fall");
         }
 
         public override void OnJump()
         {
             if (jumpCount > 0)
             {
-                player.Jump();
+                player.character.Jump();
                 jumpCount--;
             }
         }
 
         public override void OnMove(Vector3 direction)
-            => player.Move(direction, false);
+            => player.character.SetDirection(direction);
     }
 }
